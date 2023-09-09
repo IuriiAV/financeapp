@@ -182,3 +182,21 @@ http://localhost:8080/swagger-ui.html или http://localhost:8080/swagger-ui/in
 
 Если необходимо убрать из документации swagger контроллер или метод, то достаточно проставить аннотацию **@Hidden**,
 над целым контроллером или отдельным методом, тогда в swagger они не появятся.
+
+**Addons(Second):**
+Если есть желание дать описание различным кодам ответа, ваших методов, то это можно сделать через добавление поля
+**responses** в аннотацию **@Operation**, пример: 
+
+    @Operation(
+        summary = "Список менеджеров",
+        description = "Позволяет получить полный список все менеджеров в системе",
+        responses = {@ApiResponse(responseCode = "200",
+                        description = "Successfull request"),
+                            @ApiResponse(responseCode = "500", description = "Internal error")}
+            )
+    @SecurityRequirement(name = "basicauth")
+    @GetMapping
+    public List<ManagerDto> getAll() {
+
+Можно добавить все варианты кодов ответов, и описание к ним, что могут быть отданы вашим методом. Обратите внимание,
+что вложенная аннотация **@ApiResponse** имеет то же множество полей, и все ее поля тоже будут показаны в swagger.
