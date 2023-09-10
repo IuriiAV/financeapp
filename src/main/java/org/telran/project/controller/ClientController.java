@@ -1,9 +1,9 @@
 package org.telran.project.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.telran.project.dto.ClientDto;
 import org.telran.project.entity.Client;
 import org.telran.project.service.ClientService;
@@ -24,5 +24,16 @@ public class ClientController {
     @GetMapping
     List<ClientDto> getAll() {
         return service.getAll().stream().map(converter::toDto).collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<ClientDto> getById(@PathVariable("id") String id) {
+        return new ResponseEntity<>(converter.toDto(service.getById(id)), HttpStatus.OK);
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    ClientDto save(@RequestBody ClientDto clientDto) {
+        return converter.toDto(service.create(converter.toEntity(clientDto)));
     }
 }
